@@ -63,7 +63,7 @@ def index():
     master_list.append(list(session.query(db_403.Confirmed).filter(db_403.Province_State == "Arizona")))
 
     county_list = list(session.query(db_403.Admin2).filter(db_403.Province_State == "Arizona"))
-    county_list
+    # county_list
     # print (results)
     session.close()
 
