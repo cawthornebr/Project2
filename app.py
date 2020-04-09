@@ -57,9 +57,9 @@ master_list.append(list(session.query(db_403.Confirmed).filter(db_403.Province_S
 
 #AZ county list - county_list_strip
 county_list = list(session.query(db_403.Admin2).filter(db_403.Province_State == "Arizona"))
-county_list_strip = []
+county_list_1 = []
 for i in county_list:
-    county_list_strip.append(str(i[-1]))
+    county_list_1.append(str(i[-1]))
 
 #Close session
 session.close()
@@ -77,6 +77,11 @@ for i in final:
     dict.update({date_list[count]:i})
     count+=1
 county_df = pd.DataFrame(dict,index = county_list_1)
+
+#JSONify the dataframe
+json_data_for_graphing1 = county_df.to_json(orient='columns')
+json_data_for_graphing2 = county_df.to_json(orient='index')
+json_data_for_graphing3 = county_df.to_json(orient='values')
 
 #################################################
 # Flask Routes
