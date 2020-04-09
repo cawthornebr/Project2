@@ -31,10 +31,52 @@ db_401 = Base.classes.db401
 db_402 = Base.classes.db402
 db_403 = Base.classes.db403
 session = Session(engine)
+
 #################################################
 # Flask Setup
 #################################################
 app = Flask(__name__)
+
+#################################################
+# Create Lists and Dataframe
+#################################################
+
+#List of confirmed cases by date
+master_list = []
+master_list.append(list(session.query(db_324.Confirmed).filter(db_324.Province_State == "Arizona")))
+master_list.append(list(session.query(db_325.Confirmed).filter(db_325.Province_State == "Arizona")))
+master_list.append(list(session.query(db_326.Confirmed).filter(db_326.Province_State == "Arizona")))
+master_list.append(list(session.query(db_327.Confirmed).filter(db_327.Province_State == "Arizona")))
+master_list.append(list(session.query(db_328.Confirmed).filter(db_328.Province_State == "Arizona")))
+master_list.append(list(session.query(db_329.Confirmed).filter(db_329.Province_State == "Arizona")))
+master_list.append(list(session.query(db_330.Confirmed).filter(db_330.Province_State == "Arizona")))
+master_list.append(list(session.query(db_331.Confirmed).filter(db_331.Province_State == "Arizona")))
+master_list.append(list(session.query(db_401.Confirmed).filter(db_401.Province_State == "Arizona")))
+master_list.append(list(session.query(db_402.Confirmed).filter(db_402.Province_State == "Arizona")))
+master_list.append(list(session.query(db_403.Confirmed).filter(db_403.Province_State == "Arizona")))
+
+#AZ county list - county_list_strip
+county_list = list(session.query(db_403.Admin2).filter(db_403.Province_State == "Arizona"))
+county_list_strip = []
+for i in county_list:
+    county_list_strip.append(str(i[-1]))
+
+#Close session
+session.close()
+
+#Date list
+date_list = ["3/24","3/25","3/26","3/27","3/28","3/29","3/30","3/31","4/1","4/2","4/3"]
+
+#DataFrame setup - county_df
+x=[str(l).strip("(,)") for i in master_list for l in i]
+n=16
+final = [x[i * n:(i + 1) * n] for i in range((len(x) + n - 1) // n )]
+dict = {}
+count=0
+for i in final:
+    dict.update({date_list[count]:i})
+    count+=1
+county_df = pd.DataFrame(dict,index = county_list_1)
 
 #################################################
 # Flask Routes
@@ -45,29 +87,6 @@ def index():
     print("----------------------")
     print("index")
     print("----------------------")
-    # Create our session (link) from Python to the DB
-    # session = Session(engine)
-
-    # Query all confirmed cases, one for each day
-    master_list = []
-    master_list.append(list(session.query(db_324.Confirmed).filter(db_324.Province_State == "Arizona")))
-    master_list.append(list(session.query(db_325.Confirmed).filter(db_325.Province_State == "Arizona")))
-    master_list.append(list(session.query(db_326.Confirmed).filter(db_326.Province_State == "Arizona")))
-    master_list.append(list(session.query(db_327.Confirmed).filter(db_327.Province_State == "Arizona")))
-    master_list.append(list(session.query(db_328.Confirmed).filter(db_328.Province_State == "Arizona")))
-    master_list.append(list(session.query(db_329.Confirmed).filter(db_329.Province_State == "Arizona")))
-    master_list.append(list(session.query(db_330.Confirmed).filter(db_330.Province_State == "Arizona")))
-    master_list.append(list(session.query(db_331.Confirmed).filter(db_331.Province_State == "Arizona")))
-    master_list.append(list(session.query(db_401.Confirmed).filter(db_401.Province_State == "Arizona")))
-    master_list.append(list(session.query(db_402.Confirmed).filter(db_402.Province_State == "Arizona")))
-    master_list.append(list(session.query(db_403.Confirmed).filter(db_403.Province_State == "Arizona")))
-
-    county_list = list(session.query(db_403.Admin2).filter(db_403.Province_State == "Arizona"))
-    # county_list
-    # print (results)
-    session.close()
-
-    return jsonify(master_list)
 
 if __name__ == '__main__':
     app.run(debug=True)
