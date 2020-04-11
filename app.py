@@ -182,5 +182,12 @@ def b_code():
     print("b_code called")
     print("----------------------")
     return render_template('Next_route.html', covid=json_confirmed_data_for_graphing1)
+
+@app.route("/maps", methods=['GET'])
+def createMap():
+    return render_template('map.html', covid=json_confirmed_data_for_graphing1)
+ 
+ 
+
 if __name__ == '__main__':
     app.run(debug=True)
