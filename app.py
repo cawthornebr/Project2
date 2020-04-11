@@ -97,7 +97,7 @@ session.close()
 date_list = ["March_24","March_25","March_26","March_27","March_28","March_29","March_30","March_31","April_1",
              "April_2","April_3","April_4","April_5","April_6","April_7","April_8"]
 
-#DataFrame setup for confirmed cases
+#DataFrame setup for confirmed cases by county
 x=[str(l).strip("(,)") for i in master_list_confirmed for l in i]
 n=16
 final = [x[i * n:(i + 1) * n] for i in range((len(x) + n - 1) // n )]
@@ -107,6 +107,13 @@ for i in final:
     dict.update({date_list[count]:i})
     count+=1
 county_confirmed_df = pd.DataFrame(dict,index = county_list1).drop(["Unassigned"])
+
+#DataFrame setup for confirmed cases by state
+az_confirmed_df = county_confirmed_df.astype('int64', copy=False)
+az_confirmed_df.loc['Total'] = az_confirmed_df.sum()
+az_confirmed_df = pd.DataFrame(az_confirmed_df.loc["Total"])
+az_confirmed_df = az_confirmed_df.transpose()
+az_confirmed_df
 
 #DataFrame setup for death cases
 x=[str(l).strip("(,)") for i in master_list_deaths for l in i]
@@ -119,15 +126,32 @@ for i in final:
     count+=1
 county_deaths_df = pd.DataFrame(dict,index = county_list1).drop(["Unassigned"])
 
-#JSONify the dataframe of confirmed cases
+#DataFrame setup for confirmed cases by state
+az_deaths_df = county_deaths_df.astype('int64', copy=False)
+az_deaths_df.loc['Total'] = az_deaths_df.sum()
+az_deaths_df = pd.DataFrame(az_deaths_df.loc["Total"])
+az_deaths_df = az_deaths_df.transpose()
+az_deaths_df
+
+#JSONify the dataframe of confirmed cases by county
 json_confirmed_data_for_graphing1 = county_confirmed_df.to_json(orient='columns')
 json_confirmed_data_for_graphing2 = county_confirmed_df.to_json(orient='index')
 json_confirmed_data_for_graphing3 = county_confirmed_df.to_json(orient='values')
 
-#JSONify the dataframe of confirmed cases
+#JSONify the dataframe of confirmed cases by state
+json_confirmed_data_for_graphing_state1 = az_confirmed_df.to_json(orient='columns')
+json_confirmed_data_for_graphing_state2 = az_confirmed_df.to_json(orient='index')
+json_confirmed_data_for_graphing_state3 = az_confirmed_df.to_json(orient='values')
+
+#JSONify the dataframe of confirmed death cases by county
 json_deaths_data_for_graphing1 = county_deaths_df.to_json(orient='columns')
 json_deaths_data_for_graphing2 = county_deaths_df.to_json(orient='index')
 json_deaths_data_for_graphing3 = county_deaths_df.to_json(orient='values')
+
+#JSONify the dataframe of confirmed death cases by state
+json_confirmed_data_for_graphing_state1 = az_deaths_df.to_json(orient='columns')
+json_confirmed_data_for_graphing_state2 = az_deaths_df.to_json(orient='index')
+json_confirmed_data_for_graphing_state3 = az_deaths_df.to_json(orient='values')
 
 #################################################
 # Flask Routes
@@ -136,8 +160,8 @@ json_deaths_data_for_graphing3 = county_deaths_df.to_json(orient='values')
 @app.route("/")
 def index():
     print("----------------------")
-    print("index")
+    print("index called")
     print("----------------------")
-    return(json_confirmed_data_for_graphing1)
+    return(json_confirmed_data_for_graphing_state1)
 if __name__ == '__main__':
     app.run(debug=True)
