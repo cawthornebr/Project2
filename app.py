@@ -133,6 +133,18 @@ az_deaths_df = pd.DataFrame(az_deaths_df.loc["Total"])
 az_deaths_df = az_deaths_df.transpose()
 az_deaths_df
 
+#DataFrame setup for county lat and lon values
+county_list = list(session.query(db_403.Admin2).filter(db_403.Province_State == "Arizona"))
+county_lon = list(session.query(db_403.Lat).filter(db_403.Province_State == "Arizona"))
+county_lat = list(session.query(db_403.Long_).filter(db_403.Province_State == "Arizona"))
+lon_lat = {county_list[i]:[str(county_lon[i]).strip("(,)"), str(county_lat[i]).strip("(,)")] for i in range(len(county_list))}
+lon_lat_df = pd.DataFrame(lon_lat).drop(["Unassigned"], axis=1)
+
+#JSONify the dataframe of lat and lon values
+json_lat_lon_for_graphing1 = lon_lat_df.to_json(orient='columns')
+json_lat_lon_for_graphing1 = lon_lat_df.to_json(orient='index')
+json_lat_lon_for_graphing1 = lon_lat_df.to_json(orient='values')
+
 #JSONify the dataframe of confirmed cases by county
 json_confirmed_data_for_graphing1 = county_confirmed_df.to_json(orient='columns')
 json_confirmed_data_for_graphing2 = county_confirmed_df.to_json(orient='index')
@@ -163,5 +175,12 @@ def index():
     print("index called")
     print("----------------------")
     return(json_confirmed_data_for_graphing_state1)
+
+@app.route("/brandon")
+def b_code():
+    print("----------------------")
+    print("b_code called")
+    print("----------------------")
+    return render_template('Next_route.html', covid=json_confirmed_data_for_graphing1)
 if __name__ == '__main__':
     app.run(debug=True)
