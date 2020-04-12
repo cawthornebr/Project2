@@ -5,15 +5,16 @@
   <meta charset="UTF-8">
   <title>Arizona COVID Map</title>
 
-  <!-- LEAFLET -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+  <!-- Leaflet JS & CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+    integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
     crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+  <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+    integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
     crossorigin=""></script>
-  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
+  <!-- d3 JavaScript -->
+  <script src="https://d3js.org/d3.v4.min.js"></script>
 
 
   <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -23,7 +24,10 @@
 
   <script src="{{url_for('static', filename='app.js')}}"></script>
   <!-- <script> var covid = myFunc({{ covid | tojson }})</script> -->
-  <script> covid = myFunc({{ covid | tojson }})</script>
+  <script> covid = coordinateData({{ covid | tojson }})</script>
+  <script> coordinates = coordinateData({{ coordinates | tojson }})</script>
+
+
 
   <script var keys={ keys }></script>
   <!-- <p>{{ covid }}</p> -->
@@ -34,8 +38,13 @@
 </head>
 
 <body>
+  <nav>
+    <h1>Select a Date:</h1>
+    <input placeholder="Enter Date Here" id="chooseDate">
+    <button id="filterButton" onclick="dateFilter()">Filter Date</button>
+  </nav>
 
-  <h1>Select a Date</h1>
+
 
 
 
@@ -43,25 +52,504 @@
     <!-- map div -->
     <div id="map"></div>
 
+    <span id="variable">
+      <script>
 
-    <script>var map = L.map("map", {
-        center: [34.0489, -111.0937],
-        zoom: 6.5
-      });
+        var map = L.map("map", {
+          center: [34.0489, -111.0937],
+          zoom: 6.5
+        });
 
-      L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-        maxZoom: 18,
-        id: "mapbox.streets",
-        accessToken: "pk.eyJ1IjoiYmlsbHdwYXJrZXIiLCJhIjoiY2p3dHZhbGdmMG5iZDN5bXFjZjc2dDRjNSJ9.MwvYTJlKb7BRfaZQXW2PBA"
-      }).addTo(map);
-    </script>
+        L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+          attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+          maxZoom: 18,
+          id: "mapbox.streets",
+          accessToken: "pk.eyJ1IjoiYmlsbHdwYXJrZXIiLCJhIjoiY2p3dHZhbGdmMG5iZDN5bXFjZjc2dDRjNSJ9.MwvYTJlKb7BRfaZQXW2PBA"
+        }).addTo(map);
+
+        var dataToMap = [
+          {
+            County: "Apache",
+            Coordinates: [
+              35.39465006,
+              -109.4892383
+            ],
+            Dates: {
+              "March_24": "4",
+              "March_25": "7",
+              "March_26": "9",
+              "March_27": "11",
+              "March_28": "13",
+              "March_29": "13",
+              "March_30": "17",
+              "March_31": "16",
+              "April_1": "33",
+              "April_2": "35",
+              "April_3": "39",
+              "April_4": "42",
+              "April_5": "45",
+              "April_6": "58",
+              "April_7": "65",
+              "April_8": "78"
+            }
+          },
+          {
+            County: "Cochise",
+            Coordinates: [
+              31.87934684,
+              -109.7516088
+            ],
+            Dates: {
+              "March_24": "1",
+              "March_25": "1",
+              "March_26": "2",
+              "March_27": "2",
+              "March_28": "3",
+              "March_29": "3",
+              "March_30": "4",
+              "March_31": "4",
+              "April_1": "4",
+              "April_2": "4",
+              "April_3": "5",
+              "April_4": "7",
+              "April_5": "8",
+              "April_6": "9",
+              "April_7": "9",
+              "April_8": "9"
+            }
+          },
+          {
+            County: "Coconino",
+            Coordinates: [
+              35.83883429,
+              -111.7707178
+            ],
+            Dates: {
+              "March_24": "18",
+              "March_25": "23",
+              "March_26": "28",
+              "March_27": "41",
+              "March_28": "56",
+              "March_29": "62",
+              "March_30": "71",
+              "March_31": "81",
+              "April_1": "117",
+              "April_2": "146",
+              "April_3": "175",
+              "April_4": "196",
+              "April_5": "238",
+              "April_6": "257",
+              "April_7": "281",
+              "April_8": "288"
+            }
+          },
+          {
+            County: "Gila",
+            Coordinates: [
+              33.80190085,
+              -110.8132779
+            ],
+            Dates: {
+              "March_24": "0",
+              "March_25": "0",
+              "March_26": "0",
+              "March_27": "0",
+              "March_28": "1",
+              "March_29": "1",
+              "March_30": "1",
+              "March_31": "1",
+              "April_1": "1",
+              "April_2": "2",
+              "April_3": "2",
+              "April_4": "3",
+              "April_5": "3",
+              "April_6": "3",
+              "April_7": "3",
+              "April_8": "3"
+            }
+          },
+          {
+            County: "Graham",
+            Coordinates: [
+              32.93166885,
+              -109.8882178
+            ],
+            Dates: {
+              "March_24": "2",
+              "March_25": "2",
+              "March_26": "2",
+              "March_27": "4",
+              "March_28": "2",
+              "March_29": "2",
+              "March_30": "2",
+              "March_31": "2",
+              "April_1": "2",
+              "April_2": "2",
+              "April_3": "2",
+              "April_4": "3",
+              "April_5": "2",
+              "April_6": "2",
+              "April_7": "2",
+              "April_8": "2"
+            }
+          },
+          {
+            County: "Greenlee",
+            Coordinates: [
+              33.21498827,
+              -109.2405279
+            ],
+            Dates: {
+              "March_24": "0",
+              "March_25": "0",
+              "March_26": "0",
+              "March_27": "0",
+              "March_28": "0",
+              "March_29": "0",
+              "March_30": "1",
+              "March_31": "1",
+              "April_1": "1",
+              "April_2": "1",
+              "April_3": "1",
+              "April_4": "1",
+              "April_5": "1",
+              "April_6": "1",
+              "April_7": "1",
+              "April_8": "1"
+            }
+          },
+          {
+            County: "La Paz",
+            Coordinates: [
+              33.72854224,
+              -113.9810029
+            ],
+            Dates: {
+              "March_24": "0",
+              "March_25": "0",
+              "March_26": "2",
+              "March_27": "2",
+              "March_28": "2",
+              "March_29": "2",
+              "March_30": "2",
+              "March_31": "2",
+              "April_1": "2",
+              "April_2": "2",
+              "April_3": "2",
+              "April_4": "2",
+              "April_5": "3",
+              "April_6": "3",
+              "April_7": "3",
+              "April_8": "3"
+            }
+          },
+          {
+            County: "Maricopa",
+            Coordinates: [
+              33.34835867,
+              -112.4918154
+            ],
+            Dates: {
+              "March_24": "199",
+              "March_25": "251",
+              "March_26": "299",
+              "March_27": "399",
+              "March_28": "454",
+              "March_29": "545",
+              "March_30": "690",
+              "March_31": "788",
+              "April_1": "871",
+              "April_2": "961",
+              "April_3": "1049",
+              "April_4": "1171",
+              "April_5": "1326",
+              "April_6": "1433",
+              "April_7": "1495",
+              "April_8": "1559"
+            }
+          },
+          {
+            County: "Mohave",
+            Coordinates: [
+              35.70471703,
+              113.7577902
+            ],
+            Dates: {
+              "March_24": "0",
+              "March_25": "0",
+              "March_26": "2",
+              "March_27": "4",
+              "March_28": "5",
+              "March_29": "6",
+              "March_30": "7",
+              "March_31": "7",
+              "April_1": "7",
+              "April_2": "8",
+              "April_3": "9",
+              "April_4": "12",
+              "April_5": "16",
+              "April_6": "20",
+              "April_7": "23",
+              "April_8": "23"
+            }
+          },
+          {
+            County: "Navajo",
+            Coordinates: [
+              35.3997715,
+              -110.3218983
+            ],
+            Dates: {
+              "March_24": "32",
+              "March_25": "37",
+              "March_26": "43",
+              "March_27": "49",
+              "March_28": "57",
+              "March_29": "62",
+              "March_30": "88",
+              "March_31": "91",
+              "April_1": "171",
+              "April_2": "198",
+              "April_3": "245",
+              "April_4": "274",
+              "April_5": "307",
+              "April_6": "359",
+              "April_7": "378",
+              "April_8": "404"
+            }
+          },
+          {
+            County: "Pima",
+            Coordinates: [
+              32.0971334,
+              -111.7890033
+            ],
+            Dates: {
+              "March_24": "42",
+              "March_25": "49",
+              "March_26": "75",
+              "March_27": "102",
+              "March_28": "120",
+              "March_29": "153",
+              "March_30": "187",
+              "March_31": "202",
+              "April_1": "217",
+              "April_2": "237",
+              "April_3": "280",
+              "April_4": "326",
+              "April_5": "372",
+              "April_6": "415",
+              "April_7": "415",
+              "April_8": "464"
+            }
+          },
+          {
+            County: "Pinal",
+            Coordinates: [
+              32.90525627,
+              -111.3449483
+            ],
+            Dates: {
+              "March_24": "22",
+              "March_25": "23",
+              "March_26": "35",
+              "March_27": "36",
+              "March_28": "41",
+              "March_29": "51",
+              "March_30": "64",
+              "March_31": "62",
+              "April_1": "65",
+              "April_2": "69",
+              "April_3": "77",
+              "April_4": "89",
+              "April_5": "103",
+              "April_6": "106",
+              "April_7": "120",
+              "April_8": "124"
+            }
+          },
+          {
+            County: "Santa Cruz",
+            Coordinates: [
+              31.52508998,
+              -110.8479088
+            ],
+            Dates: {
+              "March_24": "1",
+              "March_25": "1",
+              "March_26": "2",
+              "March_27": "2",
+              "March_28": "2",
+              "March_29": "2",
+              "March_30": "2",
+              "March_31": "2",
+              "April_1": "3",
+              "April_2": "3",
+              "April_3": "3",
+              "April_4": "4",
+              "April_5": "4",
+              "April_6": "4",
+              "April_7": "5",
+              "April_8": "6"
+            }
+          },
+          {
+            County: "Yavapai",
+            Coordinates: [
+              34.59933926,
+              -112.5538588
+            ],
+            Dates: {
+              "March_24": "2",
+              "March_25": "3",
+              "March_26": "4",
+              "March_27": "4",
+              "March_28": "4",
+              "March_29": "5",
+              "March_30": "6",
+              "March_31": "9",
+              "April_1": "12",
+              "April_2": "13",
+              "April_3": "13",
+              "April_4": "14",
+              "April_5": "13",
+              "April_6": "13",
+              "April_7": "13",
+              "April_8": "14"
+            }
+          },
+          {
+            County: "Yuma",
+            Coordinates: [
+              32.76895712,
+              -113.9066674
+            ],
+            Dates: {
+              "March_24": "3",
+              "March_25": "4",
+              "March_26": "5",
+              "March_27": "9",
+              "March_28": "13",
+              "March_29": "12",
+              "March_30": "15",
+              "March_31": "21",
+              "April_1": "24",
+              "April_2": "34",
+              "April_3": "35",
+              "April_4": "43",
+              "April_5": "45",
+              "April_6": "49",
+              "April_7": "57",
+              "April_8": "58"
+            }
+          }
+        ]
+
+        //console.log(dataToMap)
+        // Getting a reference to the input element on the page with the id property set to 'choosedate'
+        var inputField = d3.select("#chooseDate");
+        var button = d3.select("#filterButton")
+        //console.log(button)
+
+        function dateFilter() {
+          //d3.event.preventDefault();
+          // console.log("hello")
+          var inputElement = inputField.property("value");
+          for (vari = 0; i < dataToMap; i++) {
+            var dateFilter = dataToMap.filter(dataToMap => {
+              dataToMap.Dates == inputElement
+              console.log(dataToMap.Dates[d])
+
+            })
+          }
+
+
+        }
+
+
+
+        //inputField.on("textInput", dateFilter)
+        button.on("click", dateFilter);
+
+
+        var caseMarkers = []
+
+        //var inputDate = 
+
+
+
+        for (var i = 0; i < dataToMap.length; i++) {
+          var color = "";
+          var March_24 = dataToMap[i].Dates.March_24
+
+          if (March_24 > 150) {
+            color = "red";
+          } else if (March_24 > 100) {
+            color = "orange ";
+          } else if (March_24 > 50) {
+            color = "yellow";
+          } else {
+            color = "green";
+          }
+
+          L.circle(dataToMap[i].Coordinates, {
+            fillOpacity: 0.9,
+            color: "white",
+            fillColor: color,
+            radius: March_24 * 300
+          })
+            .bindPopup(
+              "<h1>" +
+              dataToMap[i].County + " County" +
+              "</h1><hr><h3> Confirmed Cases: " +
+              dataToMap[i].Dates.March_24 +
+              "</h3>"
+
+            )
+
+
+            .addTo(map)
+        }
+
+        var link = "static/az.geojson";
+
+
+        // Grabbing our GeoJSON data..
+        d3.json(link, function (data) {
+          // Creating a GeoJSON layer with the retrieved data
+          //console.log(data);
+
+          L.geoJson(data, {
+            style: function (feature) {
+
+              return {
+                color: "white",
+                // Call the chooseColor function to decide which color to color our neighborhood (color based on borough)
+                fillColor: "none",
+                fillOpacity: 0.2,
+                weight: 1.5
+              }
+
+
+
+            }
+
+          }).addTo(map)
+
+        });
+
+
+
+
+       // dateFilter()
+
+      </script>
 
 
 
 
 
-    </script>
+      </script>
 
 
   </div>

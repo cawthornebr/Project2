@@ -142,8 +142,8 @@ lon_lat_df = pd.DataFrame(lon_lat).drop(["Unassigned"], axis=1)
 
 #JSONify the dataframe of lat and lon values
 json_lat_lon_for_graphing1 = lon_lat_df.to_json(orient='columns')
-json_lat_lon_for_graphing1 = lon_lat_df.to_json(orient='index')
-json_lat_lon_for_graphing1 = lon_lat_df.to_json(orient='values')
+json_lat_lon_for_graphing2 = lon_lat_df.to_json(orient='index')
+json_lat_lon_for_graphing3 = lon_lat_df.to_json(orient='values')
 
 #JSONify the dataframe of confirmed cases by county
 json_confirmed_data_for_graphing1 = county_confirmed_df.to_json(orient='columns')
@@ -174,7 +174,7 @@ def index():
     print("----------------------")
     print("index called")
     print("----------------------")
-    return(json_confirmed_data_for_graphing_state1)
+    return(json_confirmed_data_for_graphing1)
 
 @app.route("/brandon")
 def b_code():
@@ -183,9 +183,9 @@ def b_code():
     print("----------------------")
     return render_template('Next_route.html', covid=json_confirmed_data_for_graphing1)
 
-@app.route("/maps", methods=['GET'])
+@app.route("/maps")
 def createMap():
-    return render_template('map.html', covid=json_confirmed_data_for_graphing1)
+    return render_template('map.html', coordinates=json_lat_lon_for_graphing3, covid=json_confirmed_data_for_graphing2)
  
  
 
