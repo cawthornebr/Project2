@@ -39,7 +39,7 @@
 
 <body>
   <nav>
-    <h1>Select a Date:</h1>
+    <h1>Enter a Date: March 24 - April 8</h1>
     <input placeholder="Enter Date Here" id="chooseDate">
     <button id="filterButton" onclick="dateFilter()">Filter Date</button>
   </nav>
@@ -56,8 +56,8 @@
       <script>
 
         var map = L.map("map", {
-          center: [34.0489, -111.0937],
-          zoom: 6.5
+          center: [32.9500, -111.0937],
+          zoom: 6.7
         });
 
         L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -451,65 +451,56 @@
         var button = d3.select("#filterButton")
         //console.log(button)
 
-        function dateFilter() {
+        function dateFilter(event) {
+
           //d3.event.preventDefault();
-          // console.log("hello")
           var inputElement = inputField.property("value");
-          for (vari = 0; i < dataToMap; i++) {
-            var dateFilter = dataToMap.filter(dataToMap => {
-              dataToMap.Dates == inputElement
-              console.log(dataToMap.Dates[d])
+          //console.log(dataToMap)
+          //console.log(dataToMap[0].Dates[inputElement][0])
+          var caseMarkers = []
+          for (var i = 0; i < dataToMap.length; i++) {
 
+
+            //console.log(dataToMap)
+            //var date = (dataToMap[0].Dates[inputElement])
+            // console.log(inputElement)
+            var color = "";
+            var mapData = (dataToMap[i].Dates[inputElement])
+            // console.log(mapData)
+            if (mapData > 500) {
+              color = "red";
+            } else if (mapData > 250) {
+              color = "orange ";
+            } else if (mapData > 100) {
+              color = "yellow";
+            } else {
+              color = "green";
+            }
+
+            L.circle(dataToMap[i].Coordinates, {
+              fillOpacity: 0.9,
+              color: "white",
+              fillColor: color,
+              radius: mapData * 100
             })
+              .bindPopup(
+                "<h1>" +
+                dataToMap[i].County + " County" +
+                "</h1><hr><h3> Confirmed Cases: " +
+                dataToMap[i].Dates[inputElement] +
+                "</h3>"
+
+              )
+
+
+              .addTo(map)
+
           }
-
-
         }
-
-
-
         //inputField.on("textInput", dateFilter)
-        button.on("click", dateFilter);
-
-
-        var caseMarkers = []
-
-        //var inputDate = 
-
-
-
-        for (var i = 0; i < dataToMap.length; i++) {
-          var color = "";
-          var March_24 = dataToMap[i].Dates.March_24
-
-          if (March_24 > 150) {
-            color = "red";
-          } else if (March_24 > 100) {
-            color = "orange ";
-          } else if (March_24 > 50) {
-            color = "yellow";
-          } else {
-            color = "green";
-          }
-
-          L.circle(dataToMap[i].Coordinates, {
-            fillOpacity: 0.9,
-            color: "white",
-            fillColor: color,
-            radius: March_24 * 300
-          })
-            .bindPopup(
-              "<h1>" +
-              dataToMap[i].County + " County" +
-              "</h1><hr><h3> Confirmed Cases: " +
-              dataToMap[i].Dates.March_24 +
-              "</h3>"
-
-            )
-
-
-            .addTo(map)
-        }
+        button.on("click", dateFilter, function (d) {
+          d3.event.preventDefault()
+        });
 
         var link = "static/az.geojson";
 
@@ -528,6 +519,10 @@
                 fillColor: "none",
                 fillOpacity: 0.2,
                 weight: 1.5
+              }
+
+              if (mapData === undefined) {
+                console.log("Please enter a valid date March_24 - April_8")
               }
 
 
