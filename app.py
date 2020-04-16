@@ -161,9 +161,9 @@ json_deaths_data_for_graphing2 = county_deaths_df.to_json(orient='index')
 json_deaths_data_for_graphing3 = county_deaths_df.to_json(orient='values')
 
 #JSONify the dataframe of confirmed death cases by state
-json_confirmed_data_for_graphing_state1 = az_deaths_df.to_json(orient='columns')
-json_confirmed_data_for_graphing_state2 = az_deaths_df.to_json(orient='index')
-json_confirmed_data_for_graphing_state3 = az_deaths_df.to_json(orient='values')
+json_deaths_data_for_graphing_state1 = az_deaths_df.to_json(orient='columns')
+json_deaths_data_for_graphing_state2 = az_deaths_df.to_json(orient='index')
+json_deaths_data_for_graphing_state3 = az_deaths_df.to_json(orient='values')
 
 #################################################
 # Flask Routes
@@ -174,27 +174,21 @@ def index():
     print("----------------------")
     print("index called")
     print("----------------------")
-    return(json_confirmed_data_for_graphing1)
+    return render_template('index.html', confirmed=json_confirmed_data_for_graphing_state2)
 
-@app.route("/brandon")
-def b_code():
+@app.route("/maps")
+def createMap():
     print("----------------------")
-    print("b_code called")
+    print("map called")
     print("----------------------")
-    return render_template('Next_route.html', covid=json_confirmed_data_for_graphing1)
+    return render_template('map.html', coordinates=json_lat_lon_for_graphing3, covid=json_confirmed_data_for_graphing2)
 
 @app.route("/bar")
 def bar():
     print("----------------------")
-    print("j_code called")
+    print("bar called")
     print("----------------------")
     return render_template('bar.html', confirmed=json_confirmed_data_for_graphing_state2)
-
-@app.route("/maps")
-def createMap():
-    return render_template('map.html', coordinates=json_lat_lon_for_graphing3, covid=json_confirmed_data_for_graphing2)
- 
- 
 
 if __name__ == '__main__':
     app.run(debug=True)

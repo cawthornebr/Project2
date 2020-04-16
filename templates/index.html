@@ -3,52 +3,68 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>D3Times</title>
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
+  <title>Arizona COVID-19</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
   <link rel="stylesheet" href="static/style.css">
-  <!-- <link rel="stylesheet" href="assets/css/d3Style.css"> -->
-  <!-- 
-  <script src="{{url_for('static', filename='app.js')}}"></script> -->
-  <script src="{{url_for('static', filename='app.js')}}"></script>
-  <script src="{{url_for('static', filename='app2.js')}}"></script>
-  <script> covid = myFunc({{ covid | tojson }})</script>
-  <!-- <script> var covid = myFunc({{ covid | tojson }})</script> -->
-  <script var covid={{ covid | tojson }}></script>
-
-  <script var keys={ keys }></script>
-  <p>{{ covid }}</p>
-  <!-- <p>{{ keys }}</p> -->
-
-  <script var myDataArray={ myDataArray }></script>
-  <p>{{ myDataArray }}</p>
-
 </head>
+
+<section id="section">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" id="new1" href="index.html"></a>
+      <div class="navbar" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <a class="nav-link" href="http://127.0.0.1:5000/">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="http://127.0.0.1:5000/maps">Map <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="http://127.0.0.1:5000/county">County <span class="sr-only">(current)</span></a>
+        </ul>
+      </div>
+  </nav>
+</section>
 
 <body>
 
-  <!-- <h1>Select a Map</h1> -->
+   <!-- container -->
+   <div class="container">
 
-  <a href='maps'>Link to Maps</a>
+    <!-- row -->
+    <div class="row">
 
-  <div class="chart">
+      <!-- column -->
+      <div class="col-md-12">
+
+        <div class="box" id="main-text">
+          <h1>Arizona COVID-19<h1>
+          <section id="figure">
+            <h3>Source of data</h3>
+            <h2><small>Johns Hopkins University (JHU): <a href=https://coronavirus.jhu.edu/map.html target="_blank">https://coronavirus.jhu.edu/map.html</a></small></h2>
+            <h2><small>JHU GitHub for COVID data - <a href=https://github.com/CSSEGISandData/COVID-19 target="_blank">https://github.com/CSSEGISandData/COVID-19</a></small></h2>
+            <h2><small>JHU only started breaking cases down by county starting 3/24/2020, because of this, we will only be using data from that date to April 8th.</small></h2>
+            <h3>Information</h3>
+            <h2><small>We wanted to find the COVID-19 confirmed cases for Arizona and give a breakdown by county.</small></h2>
+
+          </section>
+          </div>
+
+      </div>
+
+      </div>
+
+    </div>
+
   </div>
+  <div id="plot"></div>
+  <script src="{{url_for('static', filename='app1.js')}}"></script>
 
-  </div>
-
-
-  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-  //   integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-  //   crossorigin="anonymous"></script>
-  // <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-  //   integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-  //   crossorigin="anonymous"></script>
-  // <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-  //   integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-  //   crossorigin="anonymous"></script>
-  // <script src="https://d3js.org/d3.v5.min.js"></script>
-  // <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script> -->
-
+  <script> confirmed = myFunc({{ confirmed | tojson }})</script>
 
 </body>
 
