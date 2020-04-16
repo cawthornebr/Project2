@@ -472,11 +472,7 @@
 
         function dateFilter(event) {
 
-
           d3.event.preventDefault()
-
-          map._panes.markerPane.remove();
-
           // document.getElementById.location.reload(true)
 
           var inputElement = inputField.property("value");
@@ -492,6 +488,8 @@
 
             //var caseMarkers = []
             for (var i = 0; i < dataToMap.length; i++) {
+
+
 
               //console.log(dataToMap)
               //var date = (dataToMap[0].Dates[inputElement])
@@ -510,7 +508,7 @@
               }
 
 
-              var markers = L.circle(dataToMap[i].Coordinates, {
+              L.circle(dataToMap[i].Coordinates, {
                 fillOpacity: 0.9,
                 color: "white",
                 fillColor: color,
