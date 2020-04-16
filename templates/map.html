@@ -16,9 +16,8 @@
   <!-- d3 JavaScript -->
   <script src="https://d3js.org/d3.v4.min.js"></script>
 
-
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="static/style.css">
   <!-- <link rel="stylesheet" href="assets/css/d3Style.css"> -->
 
@@ -36,16 +35,28 @@
 
 
 </head>
-
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" id="new1" href="index.html"></a>
+    <div class="navbar" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <a class="nav-link" href="http://127.0.0.1:5000/">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="http://127.0.0.1:5000/maps">Map <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="http://127.0.0.1:5000/bar">Bar <span class="sr-only">(current)</span></a>
+      </ul>
+    </div>
+</nav>
 <body>
-  <nav>
-    <h1>Enter a Date: March 24 - April 8</h1>
-    <input placeholder="Enter Date Here" id="chooseDate">
-    <button id="filterButton" onclick="dateFilter()">Filter Date</button>
-  </nav>
 
+  <div id="dateDisplay">
+    <h1>Enter a Date: March_24 - April_8</h1>
+  </div>
 
+  <input placeholder="Enter Date Here" id="chooseDate">
+  <button id="filterButton">Filter Date</button>
+  <!--- <button onclick=Location.reload()>Refresh Page</button> --->
+  <div>
 
+  </div>
 
 
   <div>
@@ -445,6 +456,9 @@
           }
         ]
 
+
+        //d3.event.preventDefault()
+
         //console.log(dataToMap)
         // Getting a reference to the input element on the page with the id property set to 'choosedate'
         var inputField = d3.select("#chooseDate");
@@ -453,53 +467,69 @@
 
         function dateFilter(event) {
 
-          //d3.event.preventDefault();
+          d3.event.preventDefault()
+          // document.getElementById.location.reload(true)
+
           var inputElement = inputField.property("value");
-          //console.log(dataToMap)
-          //console.log(dataToMap[0].Dates[inputElement][0])
-          var caseMarkers = []
-          for (var i = 0; i < dataToMap.length; i++) {
 
+          //console.log(dataToMap[0].Dates)
 
+          if ((inputElement !== "March_24") && (inputElement !== "March_25") && (inputElement !== "March_26") && (inputElement !== "March_27") && (inputElement !== "March_27") && (inputElement !== "March_28") && (inputElement !== "March_29") && (inputElement !== "March_30") && (inputElement !== "March_31") && (inputElement !== "April_1") && (inputElement !== "April_2") && (inputElement !== "April_2") && (inputElement !== "April_3") && (inputElement !== "April_4") && (inputElement !== "April_5") && (inputElement !== "April_6") && (inputElement !== "April_7") && (inputElement !== "April_8")) {
+            document.getElementById("dateDisplay").innerHTML = "Please enter a valid date from March_24  - April_8.";
+          } else {
+            document.getElementById("dateDisplay").innerHTML = `Now viewing map data for ${inputElement}`
             //console.log(dataToMap)
-            //var date = (dataToMap[0].Dates[inputElement])
-            // console.log(inputElement)
-            var color = "";
-            var mapData = (dataToMap[i].Dates[inputElement])
-            // console.log(mapData)
-            if (mapData > 500) {
-              color = "red";
-            } else if (mapData > 250) {
-              color = "orange ";
-            } else if (mapData > 100) {
-              color = "yellow";
-            } else {
-              color = "green";
+            //console.log(dataToMap[0].Dates[inputElement][0])
+
+            //var caseMarkers = []
+            for (var i = 0; i < dataToMap.length; i++) {
+
+
+
+              //console.log(dataToMap)
+              //var date = (dataToMap[0].Dates[inputElement])
+              // console.log(inputElement)
+              var color = "";
+              var mapData = (dataToMap[i].Dates[inputElement])
+              // console.log(mapData)
+              if (mapData > 500) {
+                color = "red";
+              } else if (mapData > 250) {
+                color = "orange ";
+              } else if (mapData > 100) {
+                color = "yellow";
+              } else {
+                color = "green";
+              }
+
+
+              L.circle(dataToMap[i].Coordinates, {
+                fillOpacity: 0.9,
+                color: "white",
+                fillColor: color,
+                radius: mapData * 100
+              })
+                .bindPopup(
+                  "<h1>" +
+                  dataToMap[i].County + " County" +
+                  "</h1><hr><h3> Confirmed Cases: " +
+                  dataToMap[i].Dates[inputElement] +
+                  "</h3>"
+
+                )
+
+
+                .addTo(map)
+
             }
-
-            L.circle(dataToMap[i].Coordinates, {
-              fillOpacity: 0.9,
-              color: "white",
-              fillColor: color,
-              radius: mapData * 100
-            })
-              .bindPopup(
-                "<h1>" +
-                dataToMap[i].County + " County" +
-                "</h1><hr><h3> Confirmed Cases: " +
-                dataToMap[i].Dates[inputElement] +
-                "</h3>"
-
-              )
-
-
-              .addTo(map)
-
           }
         }
-        //inputField.on("textInput", dateFilter)
-        button.on("click", dateFilter, function (d) {
-          d3.event.preventDefault()
+
+
+
+
+        button.on("click", dateFilter, function (event) {
+          event.preventDefault()
         });
 
         var link = "static/az.geojson";
@@ -520,12 +550,6 @@
                 fillOpacity: 0.2,
                 weight: 1.5
               }
-
-              if (mapData === undefined) {
-                console.log("Please enter a valid date March_24 - April_8")
-              }
-
-
 
             }
 
