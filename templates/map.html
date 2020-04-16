@@ -34,48 +34,26 @@
 
 
 
-</head>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" id="new1" href="index.html"></a>
-    <div class="navbar" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <a class="nav-link" href="http://127.0.0.1:5000/">Home <span class="sr-only">(current)</span></a>
-        <a class="nav-link" href="http://127.0.0.1:5000/maps">Map <span class="sr-only">(current)</span></a>
-        <a class="nav-link" href="http://127.0.0.1:5000/bar">Bar <span class="sr-only">(current)</span></a>
-      </ul>
-    </div>
-</nav>
+</head>  
+
+<section id="section">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" id="new1" href="index.html"></a>
+      <div class="navbar" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <a class="nav-link" href="http://127.0.0.1:5000/">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="http://127.0.0.1:5000/maps">Map <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="http://127.0.0.1:5000/bar">Bar <span class="sr-only">(current)</span></a>
+        </ul>
+      </div>
+  </nav>
+</section>
+
 <body>
-<<<<<<< HEAD
 
   <div id="dateDisplay">
     <h1>Enter a Date: March_24 - April_8</h1>
   </div>
-=======
-  <section id="section">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" id="new1" href="index.html"></a>
-      <div class="navbar" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-            <a class="nav-link" href="/maps">Maps <span class=" sr-only">(current)</span></a>
-            <a class="nav-link" href="/graphs">Graphs <span class="sr-only">(current)</span></a>
-          </li>
-        </ul>
-        <div id="dateDisplay">
-          <h1>Enter a Date: March_24 - April_8</h1>
-        </div>
-
-        <input placeholder="Enter Date Here" id="chooseDate">
-        <button id="filterButton">Filter Date</button>
-        <!--- <button onclick=Location.reload()>Refresh Page</button> --->
-        <div>
-
-        </div>
-    </nav>
-  </section>
->>>>>>> 66087a64d09f3d5e93b9d176dbfb3c91df6a7a78
 
   <input placeholder="Enter Date Here" id="chooseDate">
   <button id="filterButton">Filter Date</button>
@@ -83,6 +61,7 @@
   <div>
 
   </div>
+
 
 
   <div>
@@ -541,22 +520,12 @@
                   "</h1><hr><h3> Confirmed Cases: " +
                   dataToMap[i].Dates[inputElement] +
                   "</h3>"
-<<<<<<< HEAD
-=======
-
-                )
->>>>>>> 66087a64d09f3d5e93b9d176dbfb3c91df6a7a78
 
                 )
 
-<<<<<<< HEAD
 
                 .addTo(map)
 
-=======
-                .addTo(map)
-
->>>>>>> 66087a64d09f3d5e93b9d176dbfb3c91df6a7a78
             }
           }
         }
