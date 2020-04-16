@@ -8,9 +8,6 @@ function coordinateData(covid, coordinates) {
     var longitude = myCovidData[1]
     //console.log(myCovidArray)
 
-
-
-
     // for (var i = 0; i < myCovidArray.length; i++) {
     //     var dateData = myCovidArray[i]
     //     //console.log(dateData)
