@@ -183,6 +183,13 @@ def b_code():
     print("----------------------")
     return render_template('Next_route.html', covid=json_confirmed_data_for_graphing1)
 
+@app.route("/bar")
+def bar():
+    print("----------------------")
+    print("j_code called")
+    print("----------------------")
+    return render_template('bar.html', confirmed=json_confirmed_data_for_graphing_state2)
+
 @app.route("/maps")
 def createMap():
     return render_template('map.html', coordinates=json_lat_lon_for_graphing3, covid=json_confirmed_data_for_graphing2)
