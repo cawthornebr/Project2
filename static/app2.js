@@ -1,13 +1,13 @@
 function myFunc(confirmed) {
     var data = JSON.parse(confirmed);
     var dates = Object.keys(data.Total);
-    var dailyConfirmed = Object.values(data.Total)
-    var totalConfirmed = [];
+    var totalConfirmed = Object.values(data.Total)
+    var dailyConfirmed = [];
     confirmedAdd = 0
     
-    for (i=0; i<dailyConfirmed.length; i++) {
-        var confirmedAdd = dailyConfirmed[i] + confirmedAdd;
-        totalConfirmed.push(confirmedAdd);
+    for (i=0; i<totalConfirmed.length; i++) {
+        var confirmedAdd = totalConfirmed[i] - totalConfirmed[i-1];
+        dailyConfirmed.push(confirmedAdd);
     }
 
 var trace1 = {

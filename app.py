@@ -190,5 +190,12 @@ def bar():
     print("----------------------")
     return render_template('bar.html', confirmed=json_confirmed_data_for_graphing_state2)
 
+@app.route("/toast")
+def toast():
+    print("----------------------")
+    print("j_code called")
+    print("----------------------")
+    return render_template('toast.html', confirmed=json_confirmed_data_for_graphing_state2, deaths=json_deaths_data_for_graphing_state2) 
+
 if __name__ == '__main__':
     app.run(debug=True)

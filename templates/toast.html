@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>AZ Confirmed Cases by Day</title>
+  <link rel="stylesheet" href="https://uicdn.toast.com/tui.chart/latest/tui-chart.min.css">
+  <script src="https://uicdn.toast.com/tui.chart/latest/tui-chart-all.min.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
+  
+
+</head>
+
+<body>
+
+    <div id="chart-area"></div>
+<p>{{confirmed}}</p>
+<p>{{deaths}}</p>
+
+<script src="{{url_for('static', filename='app3.js')}}"></script>
+<script> var confirmed = myFunc({{confirmed | tojson }}, {{deaths | tojson}}) </script>
+
+
+<p></p>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.chart/latest/tui-chart.min.css">
+<script src="https://uicdn.toast.com/tui.chart/latest/tui-chart.min.js"></script>
+</body>
+
+</html>
