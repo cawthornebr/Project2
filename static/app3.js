@@ -30,7 +30,7 @@ function myFunc(confirmed, deaths) {
         chart: {
             width: 1160,
             height: 650,
-            title: 'Monthly Revenue',
+            title: '',
         },
         yAxis: {
             title: 'Day'
